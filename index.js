@@ -1,19 +1,7 @@
-
-
 import React, { useState, useReducer, useCallback, useMemo, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 
-const GamePhase = {
-  HOME: 0,
-  LOBBY: 1,
-  ROLE_REVEAL: 2,
-  CLUES: 3,
-  DEBATE: 4,
-  VOTING: 5,
-  RESULT: 6,
-  END_GAME: 7,
-};
-
+// Data from data/footballers.ts
 const footballers = [
   { id: 1, name: "Lionel Messi", club: "Inter Miami", nationality: "Argentina", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Lionel_Messi_WC2022.jpg/800px-Lionel_Messi_WC2022.jpg" },
   { id: 2, name: "Cristiano Ronaldo", club: "Al Nassr", nationality: "Portugal", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis%2C_September_2023_-_2.jpg/800px-Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis%2C_September_2023_-_2.jpg" },
@@ -29,40 +17,29 @@ const footballers = [
   { id: 12, name: "Jude Bellingham", club: "Real Madrid", nationality: "England", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Jude_Bellingham_2023.jpg/800px-Jude_Bellingham_2023.jpg" }
 ];
 
-// FIX: Changed icon components to accept a generic `props` argument and handle null props to avoid type inference issues and runtime errors with `React.createElement`.
-const SoccerBallIcon = (props) => {
-    const { className = "h-6 w-6 inline-block mr-2" } = props || {};
-    return React.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", className: className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-4.5-8.5l-2 1.15v3.7l2 1.15 2-1.15v-3.7l-2-1.15zm9 0l-2 1.15v3.7l2 1.15 2-1.15v-3.7l-2-1.15zm-4.5 2.3l2-1.15 2 1.15v2.3l-2 1.15-2-1.15v-2.3zM12 5.5L7.5 8 12 10.5 16.5 8 12 5.5z" }));
-};
-const SpyIcon = (props) => {
-    const { className = "h-6 w-6" } = props || {};
-    return React.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", className: className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 2 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15 12a3 3 0 11-6 0 3 3 0 016 0z" }), React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" }));
-};
-const ClipboardIcon = (props) => {
-    const { className = "h-6 w-6" } = props || {};
-    return React.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", className: className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 2 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" }));
-};
-const CheckIcon = (props) => {
-    const { className = "h-6 w-6" } = props || {};
-    return React.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", className: className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 3 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M5 13l4 4L19 7" }));
-};
-const UserIcon = (props) => {
-    const { className = "h-10 w-10" } = props || {};
-    return React.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", className: className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 1.5 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" }));
-};
-const WhistleIcon = (props) => {
-    const { className = "h-6 w-6" } = props || {};
-    return React.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "none", xmlns: "http://www.w3.org/2000/svg" }, React.createElement("path", { d: "M7 10C8.65685 10 10 8.65685 10 7C10 5.34315 8.65685 4 7 4C5.34315 4 4 5.34315 4 7C4 8.65685 5.34315 10 7 10Z", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }), React.createElement("path", { d: "M10 7H14C15.1046 7 16 7.89543 16 9V13C16 14.1046 15.1046 15 14 15H8", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }), React.createElement("path", { d: "M16 11H20", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }), React.createElement("path", { d: "M8 15V19L10 17", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }));
-};
-const LogoutIcon = (props) => {
-    const { className = "h-6 w-6" } = props || {};
-    return React.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", className: className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 2 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" }));
-};
-const ChevronLeftIcon = (props) => {
-    const { className = "h-6 w-6" } = props || {};
-    return React.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", className: className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 3 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15 19l-7-7 7-7" }));
+// Enum from types.ts
+const GamePhase = {
+  HOME: 0,
+  LOBBY: 1,
+  ROLE_REVEAL: 2,
+  CLUES: 3,
+  DEBATE: 4,
+  VOTING: 5,
+  RESULT: 6,
+  END_GAME: 7,
 };
 
+// Icons from components/icons.tsx (converted to React.createElement)
+const SoccerBallIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: `h-6 w-6 inline-block mr-2 ${props.className || ''}`, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-4.5-8.5l-2 1.15v3.7l2 1.15 2-1.15v-3.7l-2-1.15zm9 0l-2 1.15v3.7l2 1.15 2-1.15v-3.7l-2-1.15zm-4.5 2.3l2-1.15 2 1.15v2.3l-2 1.15-2-1.15v-2.3zM12 5.5L7.5 8 12 10.5 16.5 8 12 5.5z" }));
+const SpyIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: `h-6 w-6 ${props.className || ''}`, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 2 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15 12a3 3 0 11-6 0 3 3 0 016 0z" }), React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" }));
+const ClipboardIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: props.className || "h-6 w-6", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 2 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" }));
+const CheckIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: props.className || "h-6 w-6", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 3 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M5 13l4 4L19 7" }));
+const UserIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: props.className || "h-10 w-10", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 1.5 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" }));
+const WhistleIcon = (props) => React.createElement("svg", { ...props, className: props.className || "h-6 w-6", viewBox: "0 0 24 24", fill: "none", xmlns: "http://www.w3.org/2000/svg" }, React.createElement("path", { d: "M7 10C8.65685 10 10 8.65685 10 7C10 5.34315 8.65685 4 7 4C5.34315 4 4 5.34315 4 7C4 8.65685 5.34315 10 7 10Z", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }), React.createElement("path", { d: "M10 7H14C15.1046 7 16 7.89543 16 9V13C16 14.1046 15.1046 15 14 15H8", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }), React.createElement("path", { d: "M16 11H20", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }), React.createElement("path", { d: "M8 15V19L10 17", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }));
+const LogoutIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: props.className || "h-6 w-6", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 2 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" }));
+const ChevronLeftIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: props.className || "h-6 w-6", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 3 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15 19l-7-7 7-7" }));
+
+// Initial State and Reducer
 const initialState = {
   phase: GamePhase.HOME,
   gameCode: null,
@@ -158,14 +135,12 @@ const gameReducer = (state, action) => {
     }
     case 'SUBMIT_VOTE': {
       const votes = action.payload.votes;
-      // FIX: Added type assertion to the initial value of reduce to ensure voteCounts is correctly typed as Record<string, number>.
       const voteCounts = votes.reduce((acc, vote) => {
         acc[vote.votedPlayerId] = (acc[vote.votedPlayerId] || 0) + 1;
         return acc;
-      }, {} as Record<string, number>);
+      }, {});
 
-// FIX: Added a type assertion to ensure the arguments to Math.max are treated as numbers.
-      const maxVotes = Math.max(0, ...Object.values(voteCounts) as number[]);
+      const maxVotes = Math.max(0, ...Object.values(voteCounts));
       
       if (maxVotes === 0) {
         return { ...state, votes, phase: GamePhase.RESULT, eliminatedPlayerId: null, tiedPlayerIds: [] };
@@ -526,7 +501,6 @@ const DebateScreen = ({ state, dispatch }) => {
         )
     );
 };
-
 
 const VotingScreen = ({ state, dispatch }) => {
     const livingPlayers = useMemo(() => state.players.filter(p => !p.isEliminated), [state.players]);
