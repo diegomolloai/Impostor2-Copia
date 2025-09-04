@@ -1,4 +1,3 @@
-
 import React, { useState, useReducer, useCallback, useMemo, useEffect } from 'react';
 import type { GameState, Player, Clue, Vote, Footballer } from './types.ts';
 import { GamePhase } from './types.ts';
@@ -53,7 +52,6 @@ const gameReducer = (state: GameState, action: Action): GameState => {
     case 'START_GAME': {
       if (state.players.length < 3) return state;
 
-      // Assign roles based on the lobby order
       const impostorIndex = Math.floor(Math.random() * state.players.length);
       const playersWithRoles = state.players.map((player, index) => ({
         ...player,
@@ -61,19 +59,16 @@ const gameReducer = (state: GameState, action: Action): GameState => {
         role: index === impostorIndex ? 'impostor' : 'squad',
       })) as Player[];
 
-      // Now, shuffle the list of players who have roles using Fisher-Yates
       const shuffledPlayersWithRoles = [...playersWithRoles];
       for (let i = shuffledPlayersWithRoles.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [shuffledPlayersWithRoles[i], shuffledPlayersWithRoles[j]] = [shuffledPlayersWithRoles[j], shuffledPlayersWithRoles[i]];
       }
 
-      // Select a non-repeating secret footballer
       let availableFootballers = footballers.filter(f => !state.usedFootballerIds.includes(f.id));
       let currentUsedIds = state.usedFootballerIds;
 
       if (availableFootballers.length === 0) {
-          // All footballers used, reset the list
           availableFootballers = footballers;
           currentUsedIds = [];
       }
@@ -208,8 +203,8 @@ const gameReducer = (state: GameState, action: Action): GameState => {
 
 // UI Components
 const Page = ({ children }: { children: React.ReactNode }) => (
-    <div className="min-h-screen text-white flex flex-col items-center justify-center p-4 text-center relative">
-        <div className="w-full max-w-md mx-auto">{children}</div>
+    <div className="min-h-screen text-white flex flex-col items-center justify-center p-4 text-center relative overflow-hidden">
+        <div className="w-full max-w-md mx-auto z-10">{children}</div>
     </div>
 );
 
@@ -245,7 +240,7 @@ const Card = ({ children, className }: { children: React.ReactNode; className?: 
 );
 
 const ScreenHeader = ({ onBack, title }: { onBack: () => void; title: string }) => (
-    <div className="absolute top-0 left-0 right-0 p-4 flex items-center h-20">
+    <div className="absolute top-0 left-0 right-0 p-4 flex items-center h-20 z-20">
         <button onClick={onBack} className="absolute left-4 p-2 rounded-full hover:bg-white/10 transition-colors" aria-label="Go back">
             <ChevronLeftIcon className="w-8 h-8" />
         </button>
@@ -260,11 +255,36 @@ const QuitButton = ({ onQuit }: { onQuit: () => void }) => {
         }
     };
     return (
-        <button onClick={handleQuit} className="absolute top-4 right-4 flex items-center gap-2 text-sm text-yellow-300 hover:text-white transition-colors" aria-label="Quit game">
+        <button onClick={handleQuit} className="absolute top-6 right-4 flex items-center gap-2 text-sm text-yellow-300 hover:text-white transition-colors z-20" aria-label="Quit game">
             <LogoutIcon className="w-5 h-5"/> Salir
         </button>
     );
 };
+
+const HelpModal = ({ onClose }: { onClose: () => void }) => (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" onClick={onClose}>
+        <div className="bg-green-800 rounded-xl p-6 shadow-2xl border-2 border-yellow-400/50 max-w-lg w-full text-left" onClick={e => e.stopPropagation()}>
+            <h2 className="text-2xl font-bold mb-4 text-yellow-400">¿Cómo Jugar?</h2>
+            <div className="space-y-3 text-gray-200">
+                <p><strong>Objetivo:</strong> ¡Encontrar al impostor que no sabe quién es el futbolista secreto!</p>
+                <p><strong>Roles:</strong></p>
+                <ul className="list-disc list-inside ml-4">
+                    <li><strong className="text-blue-400">Miembro del Equipo:</strong> Sabes quién es el futbolista. Tu objetivo es dar pistas para que los demás te crean y votar para eliminar al impostor.</li>
+                    <li><strong className="text-red-500">Impostor:</strong> No sabes quién es el futbolista. Tu objetivo es engañar a todos, hacerles creer que eres del equipo y sobrevivir a las votaciones.</li>
+                </ul>
+                <p><strong>Flujo del Juego (Online):</strong></p>
+                 <ol className="list-decimal list-inside ml-4">
+                    <li><strong>Pistas:</strong> Cada jugador da una pista sobre el futbolista. ¡El impostor debe improvisar!</li>
+                    <li><strong>Debate:</strong> Discutid las pistas para encontrar contradicciones.</li>
+                    <li><strong>Votación:</strong> Todos votan para eliminar al jugador que creen que es el impostor.</li>
+                </ol>
+                 <p><strong>Flujo del Juego (Offline):</strong> Es más simple. No hay pistas, solo debate y votación directa.</p>
+                 <p>¡El equipo gana si elimina al impostor! ¡El impostor gana si sobrevive hasta que solo queden 2 jugadores!</p>
+            </div>
+            <Button onClick={onClose} className="mt-6">Entendido</Button>
+        </div>
+    </div>
+);
 
 
 // Screen Components
@@ -302,8 +322,10 @@ const LoginScreen = ({ onLogin }: { onLogin: (name: string) => void }) => {
 };
 
 const ModeSelectionScreen = ({ loggedInUser, dispatch, onLogout }: { loggedInUser: string, dispatch: React.Dispatch<Action>, onLogout: () => void }) => {
+    const [isHelpVisible, setIsHelpVisible] = useState(false);
     return (
         <Page>
+            {isHelpVisible && <HelpModal onClose={() => setIsHelpVisible(false)} />}
             <div className="absolute top-4 right-4">
                 <button onClick={onLogout} className="flex items-center gap-2 text-sm text-yellow-300 hover:text-white transition-colors">
                     <LogoutIcon className="w-5 h-5"/> Salir
@@ -315,12 +337,15 @@ const ModeSelectionScreen = ({ loggedInUser, dispatch, onLogout }: { loggedInUse
                 <p className="text-xl text-gray-200 mb-8">Elige un modo de juego</p>
                 <Card className="w-full space-y-4">
                     <Button onClick={() => dispatch({ type: 'CREATE_GAME', payload: { playerName: loggedInUser, gameMode: 'offline' } })}>
-                        Jugar Offline
+                        Jugar Offline (Pass & Play)
                     </Button>
                      <Button onClick={() => dispatch({ type: 'CREATE_GAME', payload: { playerName: loggedInUser, gameMode: 'online' } })}>
                         Crear Partida Online
                     </Button>
-                    <Button disabled>Unirse a Partida Online</Button>
+                    <Button disabled>Unirse a Partida Online (Próximamente)</Button>
+                    <SecondaryButton onClick={() => setIsHelpVisible(true)} className="!bg-transparent border-2 border-yellow-400 text-yellow-400 hover:!bg-yellow-400/20">
+                        Cómo Jugar
+                    </SecondaryButton>
                 </Card>
             </div>
         </Page>
@@ -329,6 +354,7 @@ const ModeSelectionScreen = ({ loggedInUser, dispatch, onLogout }: { loggedInUse
 
 const LobbyScreen = ({ state, dispatch }: { state: GameState; dispatch: React.Dispatch<Action> }) => {
     const [newPlayerName, setNewPlayerName] = useState('');
+    const [copied, setCopied] = useState(false);
     const { players, gameCode } = state;
 
     const handleAddPlayer = (e: React.FormEvent) => {
@@ -339,6 +365,14 @@ const LobbyScreen = ({ state, dispatch }: { state: GameState; dispatch: React.Di
         }
     };
     
+    const handleCopyCode = () => {
+        if (gameCode) {
+            navigator.clipboard.writeText(gameCode);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        }
+    };
+
     const canStart = players.length >= 3;
 
     return (
@@ -346,8 +380,13 @@ const LobbyScreen = ({ state, dispatch }: { state: GameState; dispatch: React.Di
             <ScreenHeader title="Sala de Espera" onBack={() => dispatch({ type: 'GO_HOME' })} />
             <Card className="mt-20">
                 <div className="flex justify-between items-center bg-green-900 px-4 py-2 rounded-lg mb-6 border border-green-400">
-                    <span className="text-gray-300">CÓDIGO:</span>
-                    <span className="text-2xl font-bold tracking-widest text-yellow-400">{gameCode}</span>
+                    <div className="text-left">
+                        <span className="text-gray-300 text-sm">CÓDIGO DE PARTIDA</span>
+                        <p className="text-2xl font-bold tracking-widest text-yellow-400">{gameCode}</p>
+                    </div>
+                    <button onClick={handleCopyCode} className="p-2 rounded-lg hover:bg-green-700 transition-colors" title="Copiar código">
+                        {copied ? <CheckIcon className="w-8 h-8 text-yellow-400" /> : <ClipboardIcon className="w-8 h-8" />}
+                    </button>
                 </div>
 
                 <h2 className="text-2xl font-semibold mb-4">Jugadores ({players.length}/10)</h2>
@@ -381,13 +420,15 @@ const LobbyScreen = ({ state, dispatch }: { state: GameState; dispatch: React.Di
 };
 
 const RoleRevealScreen = ({ state, dispatch }: { state: GameState; dispatch: React.Dispatch<Action> }) => {
-    const [isRoleVisible, setIsRoleVisible] = useState(false);
+    const [isRevealed, setIsRevealed] = useState(false);
+    const [isFlipped, setIsFlipped] = useState(false);
     const { players, currentPlayerTurnIndex, secretFootballer } = state;
     const currentPlayer = players[currentPlayerTurnIndex];
     const isLastPlayer = currentPlayerTurnIndex === players.length - 1;
 
     useEffect(() => {
-        setIsRoleVisible(false);
+        setIsRevealed(false);
+        setIsFlipped(false);
     }, [currentPlayerTurnIndex]);
 
     const handleContinue = () => {
@@ -398,14 +439,14 @@ const RoleRevealScreen = ({ state, dispatch }: { state: GameState; dispatch: Rea
         }
     };
     
-    if (!isRoleVisible) {
+    if (!isRevealed) {
         return (
             <Page>
                 <QuitButton onQuit={() => dispatch({ type: 'GO_HOME' })} />
                 <Card>
                     <p className="text-xl mb-4">Pásale el móvil a</p>
                     <h1 className="text-4xl font-bold text-yellow-400 mb-8">{currentPlayer.name}</h1>
-                    <Button onClick={() => setIsRoleVisible(true)}>
+                    <Button onClick={() => setIsRevealed(true)}>
                         Listo, muéstrame mi rol
                     </Button>
                 </Card>
@@ -416,37 +457,52 @@ const RoleRevealScreen = ({ state, dispatch }: { state: GameState; dispatch: Rea
     return (
         <Page>
             <QuitButton onQuit={() => dispatch({ type: 'GO_HOME' })} />
-            <Card>
-                <div className="mb-8 p-4 border-2 border-dashed border-gray-400 rounded-lg">
-                    <h2 className="text-2xl font-bold mb-2">Tu rol es:</h2>
-                    {currentPlayer.role === 'impostor' ? (
-                        <div className="flex items-center justify-center gap-2">
-                            <SpyIcon />
-                            <span className="text-3xl font-bold text-red-500">IMPOSTOR</span>
-                        </div>
-                    ) : (
-                        <div className="flex items-center justify-center gap-2">
+            <div className="w-full max-w-sm mx-auto card-flip-container" onClick={() => setIsFlipped(!isFlipped)}>
+                <div className={`card-flipper w-full h-[500px] ${isFlipped ? 'flipped' : ''}`}>
+                    {/* Card Front */}
+                    <div className="card-front absolute w-full h-full">
+                        <Card className="w-full h-full flex flex-col items-center justify-center">
+                            <h1 className="text-3xl font-bold mb-4">Tu Identidad Secreta</h1>
                              <SoccerBallIcon />
-                            <span className="text-3xl font-bold text-blue-400">MIEMBRO DEL EQUIPO</span>
-                        </div>
-                    )}
-                </div>
-
-                {currentPlayer.role === 'squad' && secretFootballer && (
-                    <div className="mb-8">
-                        <p className="text-lg mb-2">El futbolista secreto es:</p>
-                        <h3 className="text-2xl font-bold text-yellow-400 mb-4">{secretFootballer.name}</h3>
-                         <img src={secretFootballer.imageUrl} alt={secretFootballer.name} className="w-32 h-32 object-cover rounded-full mx-auto border-4 border-yellow-400" />
+                            <p className="text-lg my-8">Toca la carta para revelar tu rol</p>
+                            <p className="text-sm text-gray-400">(Vuelve a tocarla para ocultarlo)</p>
+                        </Card>
                     </div>
-                )}
-                {currentPlayer.role === 'impostor' && (
-                    <p className="text-lg mb-8">No sabes quién es el futbolista. ¡Engáñalos a todos!</p>
-                )}
-                
-                <Button onClick={handleContinue}>
-                    {isLastPlayer ? 'Comenzar' : 'Entendido, pasar al siguiente'}
-                </Button>
-            </Card>
+                    {/* Card Back */}
+                    <div className="card-back absolute w-full h-full">
+                        <Card className="w-full h-full flex flex-col items-center justify-center">
+                             <div className="mb-6 p-4 border-2 border-dashed border-gray-400 rounded-lg">
+                                <h2 className="text-xl font-bold mb-2">Tu rol es:</h2>
+                                {currentPlayer.role === 'impostor' ? (
+                                    <div className="flex items-center justify-center gap-2">
+                                        <SpyIcon />
+                                        <span className="text-2xl font-bold text-red-500">IMPOSTOR</span>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center justify-center gap-2">
+                                         <SoccerBallIcon />
+                                        <span className="text-2xl font-bold text-blue-400">MIEMBRO DEL EQUIPO</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {currentPlayer.role === 'squad' && secretFootballer && (
+                                <div className="mb-6 text-center">
+                                    <p className="text-md mb-2">El futbolista secreto es:</p>
+                                    <h3 className="text-xl font-bold text-yellow-400 mb-2">{secretFootballer.name}</h3>
+                                     <img src={secretFootballer.imageUrl} alt={secretFootballer.name} className="w-24 h-24 object-cover rounded-full mx-auto border-4 border-yellow-400" />
+                                </div>
+                            )}
+                            {currentPlayer.role === 'impostor' && (
+                                <p className="text-md mb-6 text-center">No sabes quién es el futbolista. ¡Engáñalos a todos!</p>
+                            )}
+                        </Card>
+                    </div>
+                </div>
+            </div>
+             <Button onClick={handleContinue} className="mt-8">
+                {isLastPlayer ? 'Comenzar' : 'Entendido, pasar al siguiente'}
+            </Button>
         </Page>
     );
 };
@@ -488,27 +544,43 @@ const CluesScreen = ({ state, dispatch }: { state: GameState; dispatch: React.Di
 };
 
 const DebateScreen = ({ state, dispatch }: { state: GameState; dispatch: React.Dispatch<Action> }) => {
+    const [timer, setTimer] = useState(120); // 2 minutes
+
+    useEffect(() => {
+        if (timer > 0) {
+            const interval = setInterval(() => setTimer(t => t - 1), 1000);
+            return () => clearInterval(interval);
+        } else {
+            dispatch({ type: 'START_VOTING' });
+        }
+    }, [timer, dispatch]);
+
+    const minutes = Math.floor(timer / 60);
+    const seconds = timer % 60;
+
     return (
         <Page>
             <QuitButton onQuit={() => dispatch({ type: 'GO_HOME' })} />
             <Card>
-                <h1 className="text-3xl font-bold mb-4">Fase de Debate</h1>
+                <div className="absolute -top-5 right-1/2 translate-x-1/2 bg-yellow-400 text-green-900 px-4 py-1 rounded-full text-2xl font-bold shadow-lg">
+                    {minutes}:{seconds.toString().padStart(2, '0')}
+                </div>
+                <h1 className="text-3xl font-bold mb-4 pt-4">Fase de Debate</h1>
                 <p className="text-lg mb-6">Discutid las pistas y decidid quién es el impostor.</p>
                 
                 <div className="bg-green-900/70 p-4 rounded-lg mb-6 border border-green-400">
                     <h2 className="text-xl font-bold mb-3 text-yellow-400">Pistas de la Ronda:</h2>
                     <ul className="space-y-2 text-left">
-                        {state.clues.map((c, index) => (
-                            <li key={index} className="p-2 bg-green-800 rounded">
-                                <span className="italic">" {c.clue} "</span>
-                            </li>
-                        ))}
+                        {state.clues.map((c, index) => {
+                            const player = state.players.find(p => p.id === c.playerId);
+                            return (
+                                <li key={index} className="p-2 bg-green-800 rounded">
+                                    <strong className="text-yellow-300">{player?.name}:</strong>
+                                    <span className="italic">" {c.clue} "</span>
+                                </li>
+                            );
+                        })}
                     </ul>
-                </div>
-                
-                <div className="text-center my-6">
-                    <p className="text-lg">Hablad entre vosotros para encontrar al impostor.</p>
-                    <p className="text-sm text-gray-300">(Usad Discord, chat de voz o hablad en persona)</p>
                 </div>
                 
                 <Button onClick={() => dispatch({ type: 'START_VOTING' })}>
@@ -524,12 +596,14 @@ const VotingScreen = ({ state, dispatch }: { state: GameState; dispatch: React.D
     const livingPlayers = useMemo(() => state.players.filter(p => !p.isEliminated), [state.players]);
     const [votes, setVotes] = useState<Vote[]>([]);
     const [voterIndex, setVoterIndex] = useState(0);
+    const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
     const [votingPhase, setVotingPhase] = useState<'CONFIRM_VOTER' | 'VOTING_IN_PROGRESS' | 'VOTE_SUBMITTED'>('CONFIRM_VOTER');
 
     const currentVoter = livingPlayers[voterIndex];
 
-    const handleVote = (votedPlayerId: string) => {
-        const newVotes = [...votes, { voterId: currentVoter.id, votedPlayerId }];
+    const handleVote = () => {
+        if (!selectedPlayerId) return;
+        const newVotes = [...votes, { voterId: currentVoter.id, votedPlayerId: selectedPlayerId }];
         setVotes(newVotes);
 
         if (voterIndex < livingPlayers.length - 1) {
@@ -538,9 +612,10 @@ const VotingScreen = ({ state, dispatch }: { state: GameState; dispatch: React.D
             dispatch({ type: 'SUBMIT_VOTE', payload: { votes: newVotes } });
         }
     };
-
+    
     const handleNextVoter = () => {
         setVoterIndex(voterIndex + 1);
+        setSelectedPlayerId(null);
         setVotingPhase('CONFIRM_VOTER');
     };
 
@@ -578,24 +653,30 @@ const VotingScreen = ({ state, dispatch }: { state: GameState; dispatch: React.D
             <Card>
                 <h1 className="text-3xl font-bold mb-2">¿Quién es el Impostor?</h1>
                 <p className="text-xl mb-6">Voto de <span className="font-bold text-yellow-400">{currentVoter.name}</span></p>
-                <div className="w-full flex flex-col space-y-3">
+                <div className="w-full flex flex-col space-y-3 mb-6">
                     {livingPlayers.filter(p => p.id !== currentVoter.id).map(player => (
-                        <Button
+                        <button
                             key={player.id}
-                            onClick={() => handleVote(player.id)}
-                            className="bg-green-600 hover:bg-green-500 text-white"
+                            onClick={() => setSelectedPlayerId(player.id)}
+                            className={`w-full px-4 py-3 font-bold text-lg rounded-lg transition-all duration-200 uppercase tracking-wider shadow-md text-white
+                                ${selectedPlayerId === player.id ? 'bg-yellow-500 ring-4 ring-yellow-300 scale-105' : 'bg-green-600 hover:bg-green-500'}`}
                         >
                             {player.name}
-                        </Button>
+                        </button>
                     ))}
                 </div>
+                 <Button onClick={handleVote} disabled={!selectedPlayerId}>
+                    Confirmar Voto
+                </Button>
             </Card>
         </Page>
     );
 };
 
 const ResultScreen = ({ state, dispatch }: { state: GameState; dispatch: React.Dispatch<Action> }) => {
-    const { eliminatedPlayerId, tiedPlayerIds, players } = state;
+    const { eliminatedPlayerId, tiedPlayerIds, players, votes } = state;
+
+    const getPlayerName = (id: string) => players.find(p => p.id === id)?.name || 'Desconocido';
 
     const renderContent = () => {
         if (eliminatedPlayerId) {
@@ -605,8 +686,7 @@ const ResultScreen = ({ state, dispatch }: { state: GameState; dispatch: React.D
                 <>
                     <h1 className="text-3xl font-bold text-red-500 mb-4">¡Jugador Eliminado!</h1>
                     <p className="text-4xl font-bold mb-4">{eliminatedPlayer.name}</p>
-                    <p className="text-xl mb-2">ha sido eliminado.</p>
-                    <p className="text-xl">Su rol era: <span className={`font-bold ${eliminatedPlayer.role === 'impostor' ? 'text-red-400' : 'text-blue-400'}`}>{eliminatedPlayer.role?.toUpperCase()}</span></p>
+                    <p className="text-xl mb-6">Su rol era: <span className={`font-bold ${eliminatedPlayer.role === 'impostor' ? 'text-red-400' : 'text-blue-400'}`}>{eliminatedPlayer.role?.toUpperCase()}</span></p>
                 </>
             );
         }
@@ -629,7 +709,6 @@ const ResultScreen = ({ state, dispatch }: { state: GameState; dispatch: React.D
             <>
                 <h1 className="text-3xl font-bold text-yellow-500 mb-4">Sin Mayoría</h1>
                 <p className="text-xl">No hubo votos suficientes para eliminar a un jugador.</p>
-                <p className="text-xl">Nadie es eliminado en esta ronda.</p>
             </>
         );
     };
@@ -639,7 +718,18 @@ const ResultScreen = ({ state, dispatch }: { state: GameState; dispatch: React.D
             <QuitButton onQuit={() => dispatch({ type: 'GO_HOME' })} />
             <Card>
                 {renderContent()}
-                <Button onClick={() => dispatch({ type: 'NEXT_ROUND' })} className="mt-8">
+                <div className="bg-green-900/70 p-4 rounded-lg my-6 border border-green-400">
+                    <h2 className="text-xl font-bold mb-3 text-yellow-400">Desglose de Votos:</h2>
+                    <ul className="space-y-2 text-left">
+                        {votes.map((vote, index) => (
+                             <li key={index} className="p-2 bg-green-800 rounded flex justify-between">
+                                <span>{getPlayerName(vote.voterId)}</span>
+                                <span className="font-bold text-yellow-300"> -> {getPlayerName(vote.votedPlayerId)}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <Button onClick={() => dispatch({ type: 'NEXT_ROUND' })} className="mt-4">
                     Siguiente Ronda
                 </Button>
             </Card>
@@ -647,12 +737,36 @@ const ResultScreen = ({ state, dispatch }: { state: GameState; dispatch: React.D
     );
 };
 
+const Confetti = () => {
+    const confettiCount = 50;
+    const colors = ['#fde047', '#facc15', '#fbbf24', '#f59e0b', '#d97706'];
+
+    return (
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+            {Array.from({ length: confettiCount }).map((_, i) => (
+                <div
+                    key={i}
+                    className="confetti"
+                    style={{
+                        left: `${Math.random() * 100}%`,
+                        backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+                        animationDelay: `${Math.random() * 3}s`,
+                        transform: `scale(${Math.random() * 0.8 + 0.5})`
+                    }}
+                />
+            ))}
+        </div>
+    );
+};
+
+
 const EndGameScreen = ({ state, dispatch }: { state: GameState; dispatch: React.Dispatch<Action> }) => {
     const { winner, players, secretFootballer } = state;
     const impostor = players.find(p => p.role === 'impostor');
     
     return (
         <Page>
+            <Confetti />
             <Card>
                 <h1 className="text-5xl font-bold mb-6">¡Fin del Partido!</h1>
                 {winner === 'squad' ? (
@@ -704,7 +818,6 @@ const App = () => {
             setLoggedInUser(storedName);
         }
 
-        // Preload all footballer images on initial app load
         const imageUrls = footballers.map(f => f.imageUrl);
         imageUrls.forEach(url => {
             const img = new Image();
