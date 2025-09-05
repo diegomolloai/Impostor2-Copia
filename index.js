@@ -14,7 +14,37 @@ const footballers = [
   { id: 9, name: "Luka Modrić", club: "Real Madrid", nationality: "Croatia", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Luka_Modri%C4%87_2023.jpg/800px-Luka_Modri%C4%87_2023.jpg" },
   { id: 10, name: "Robert Lewandowski", club: "Barcelona", nationality: "Poland", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Robert_Lewandowski_2023.jpg/800px-Robert_Lewandowski_2023.jpg" },
   { id: 11, name: "Vinícius Júnior", club: "Real Madrid", nationality: "Brazil", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Vin%C3%ADcius_J%C3%BAnior_2023.jpg/800px-Vin%C3%ADcius_J%C3%BAnior_2023.jpg" },
-  { id: 12, name: "Jude Bellingham", club: "Real Madrid", nationality: "England", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Jude_Bellingham_2023.jpg/800px-Jude_Bellingham_2023.jpg" }
+  { id: 12, name: "Jude Bellingham", club: "Real Madrid", nationality: "England", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Jude_Bellingham_2023.jpg/800px-Jude_Bellingham_2023.jpg" },
+  { id: 13, name: "Zinedine Zidane", club: "Real Madrid (Leyenda)", nationality: "France", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Zinedine_Zidane_by_Tasnim_03.jpg/800px-Zinedine_Zidane_by_Tasnim_03.jpg" },
+  { id: 14, name: "Ronaldinho", club: "Barcelona (Leyenda)", nationality: "Brazil", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Ronaldinho_13_November_2022.jpg/800px-Ronaldinho_13_November_2022.jpg" },
+  { id: 15, name: "Ronaldo Nazario", club: "Real Madrid (Leyenda)", nationality: "Brazil", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Ronaldo_Nazario_in_2018.jpg/800px-Ronaldo_Nazario_in_2018.jpg" },
+  { id: 16, name: "Diego Maradona", club: "Napoli (Leyenda)", nationality: "Argentina", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Maradona-Mundial_86_con_la_copa.jpg/800px-Maradona-Mundial_86_con_la_copa.jpg" },
+  { id: 17, name: "Pelé", club: "Santos (Leyenda)", nationality: "Brazil", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Pele_by_John_Mathew_Smith.jpg/800px-Pele_by_John_Mathew_Smith.jpg" },
+  { id: 18, name: "Johan Cruyff", club: "Ajax (Leyenda)", nationality: "Netherlands", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Johan_Cruijff_1974c.jpg/800px-Johan_Cruijff_1974c.jpg" },
+  { id: 19, name: "Andrés Iniesta", club: "Barcelona (Leyenda)", nationality: "Spain", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Andr%C3%A9s_Iniesta_2017.jpg/800px-Andr%C3%A9s_Iniesta_2017.jpg" },
+  { id: 20, name: "Xavi Hernández", club: "Barcelona (Leyenda)", nationality: "Spain", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Xavi_Hernandez_2009-05-02.jpg/800px-Xavi_Hernandez_2009-05-02.jpg" },
+  { id: 21, name: "Thierry Henry", club: "Arsenal (Leyenda)", nationality: "France", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Thierry_Henry_2007-07-26.jpg/800px-Thierry_Henry_2007-07-26.jpg" },
+  { id: 22, name: "Paolo Maldini", club: "AC Milan (Leyenda)", nationality: "Italy", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Paolo_Maldini_at_the_2018_Best_FIFA_Football_Awards.jpg/800px-Paolo_Maldini_at_the_2018_Best_FIFA_Football_Awards.jpg" },
+  { id: 23, name: "Harry Kane", club: "Bayern Munich", nationality: "England", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Harry_Kane_in_2023.jpg/800px-Harry_Kane_in_2023.jpg" },
+  { id: 24, name: "Son Heung-min", club: "Tottenham Hotspur", nationality: "South Korea", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Son_Heung-min_at_the_2022_FIFA_World_Cup_2.jpg/800px-Son_Heung-min_at_the_2022_FIFA_World_Cup_2.jpg" },
+  { id: 25, name: "Sadio Mané", club: "Al Nassr", nationality: "Senegal", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Sadio_Man%C3%A9_Senegal_v_Benin_2022.jpg/800px-Sadio_Man%C3%A9_Senegal_v_Benin_2022.jpg" },
+  { id: 26, name: "N'Golo Kanté", club: "Al-Ittihad", nationality: "France", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/N%27Golo_Kant%C3%A9_in_2018.jpg/800px-N%27Golo_Kant%C3%A9_in_2018.jpg" },
+  { id: 27, name: "Karim Benzema", club: "Al-Ittihad", nationality: "France", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Karim_Benzema_wearing_Real_Madrid_home_kit_2021-2022.jpg/800px-Karim_Benzema_wearing_Real_Madrid_home_kit_2021-2022.jpg" },
+  { id: 28, name: "Sergio Ramos", club: "Sevilla", nationality: "Spain", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Sergio_Ramos_in_2018.jpg/800px-Sergio_Ramos_in_2018.jpg" },
+  { id: 29, name: "Luis Suárez", club: "Inter Miami", nationality: "Uruguay", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Luis_Su%C3%A1rez_in_2018.jpg/800px-Luis_Su%C3%A1rez_in_2018.jpg" },
+  { id: 30, name: "Ángel Di María", club: "Benfica", nationality: "Argentina", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/%C3%81ngel_Di_Mar%C3%ADa_2023.jpg/800px-%C3%81ngel_Di_Mar%C3%ADa_2023.jpg" },
+  { id: 31, name: "Antoine Griezmann", club: "Atlético Madrid", nationality: "France", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Antoine_Griezmann_in_2023.jpg/800px-Antoine_Griezmann_in_2023.jpg" },
+  { id: 32, name: "Toni Kroos", club: "Real Madrid", nationality: "Germany", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Toni_Kroos_2017.jpg/800px-Toni_Kroos_2017.jpg" },
+  { id: 33, name: "Fede Valverde", club: "Real Madrid", nationality: "Uruguay", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Federico_Valverde_in_2023.jpg/800px-Federico_Valverde_in_2023.jpg" },
+  { id: 34, name: "Lautaro Martínez", club: "Inter Milan", nationality: "Argentina", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Lautaro_Martinez_2023.jpg/800px-Lautaro_Martinez_2023.jpg" },
+  { id: 35, name: "Julián Álvarez", club: "Manchester City", nationality: "Argentina", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Juli%C3%A1n_%C3%81lvarez_2023.jpg/800px-Juli%C3%A1n_%C3%81lvarez_2023.jpg" },
+  { id: 36, name: "Bukayo Saka", club: "Arsenal", nationality: "England", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Bukayo_Saka_2023.jpg/800px-Bukayo_Saka_2023.jpg" },
+  { id: 37, name: "Phil Foden", club: "Manchester City", nationality: "England", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Phil_Foden_2023.jpg/800px-Phil_Foden_2023.jpg" },
+  { id: 38, name: "Jamal Musiala", club: "Bayern Munich", nationality: "Germany", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Jamal_Musiala_on_12_August_2023.jpg/800px-Jamal_Musiala_on_12_August_2023.jpg" },
+  { id: 39, name: "Gavi", club: "Barcelona", nationality: "Spain", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Gavi_2023.jpg/800px-Gavi_2023.jpg" },
+  { id: 40, name: "Pedri", club: "Barcelona", nationality: "Spain", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Pedri_2023.jpg/800px-Pedri_2023.jpg" },
+  { id: 41, name: "Alisson Becker", club: "Liverpool", nationality: "Brazil", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Alisson_Becker_2019.jpg/800px-Alisson_Becker_2019.jpg" },
+  { id: 42, name: "Thibaut Courtois", club: "Real Madrid", nationality: "Belgium", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Thibaut_Courtois_2018.jpg/800px-Thibaut_Courtois_2018.jpg" }
 ];
 
 // Enum from types.ts
@@ -30,14 +60,14 @@ const GamePhase = {
 };
 
 // Icons from components/icons.tsx (converted to React.createElement)
-const SoccerBallIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: `h-6 w-6 inline-block mr-2 ${props.className || ''}`, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-4.5-8.5l-2 1.15v3.7l2 1.15 2-1.15v-3.7l-2-1.15zm9 0l-2 1.15v3.7l2 1.15 2-1.15v-3.7l-2-1.15zm-4.5 2.3l2-1.15 2 1.15v2.3l-2 1.15-2-1.15v-2.3zM12 5.5L7.5 8 12 10.5 16.5 8 12 5.5z" }));
-const SpyIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: `h-6 w-6 ${props.className || ''}`, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 2 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15 12a3 3 0 11-6 0 3 3 0 016 0z" }), React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" }));
-const ClipboardIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: props.className || "h-6 w-6", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 2 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" }));
-const CheckIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: props.className || "h-6 w-6", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 3 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M5 13l4 4L19 7" }));
-const UserIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: props.className || "h-10 w-10", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 1.5 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" }));
-const WhistleIcon = (props) => React.createElement("svg", { ...props, className: props.className || "h-6 w-6", viewBox: "0 0 24 24", fill: "none", xmlns: "http://www.w3.org/2000/svg" }, React.createElement("path", { d: "M7 10C8.65685 10 10 8.65685 10 7C10 5.34315 8.65685 4 7 4C5.34315 4 4 5.34315 4 7C4 8.65685 5.34315 10 7 10Z", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }), React.createElement("path", { d: "M10 7H14C15.1046 7 16 7.89543 16 9V13C16 14.1046 15.1046 15 14 15H8", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }), React.createElement("path", { d: "M16 11H20", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }), React.createElement("path", { d: "M8 15V19L10 17", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }));
-const LogoutIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: props.className || "h-6 w-6", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 2 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" }));
-const ChevronLeftIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: props.className || "h-6 w-6", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 3 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15 19l-7-7 7-7" }));
+const SoccerBallIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: `h-6 w-6 inline-block mr-2 ${props?.className || ''}`, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-4.5-8.5l-2 1.15v3.7l2 1.15 2-1.15v-3.7l-2-1.15zm9 0l-2 1.15v3.7l2 1.15 2-1.15v-3.7l-2-1.15zm-4.5 2.3l2-1.15 2 1.15v2.3l-2 1.15-2-1.15v-2.3zM12 5.5L7.5 8 12 10.5 16.5 8 12 5.5z" }));
+const SpyIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: `h-6 w-6 ${props?.className || ''}`, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 2 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15 12a3 3 0 11-6 0 3 3 0 016 0z" }), React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" }));
+const ClipboardIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: props?.className || "h-6 w-6", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 2 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" }));
+const CheckIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: props?.className || "h-6 w-6", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 3 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M5 13l4 4L19 7" }));
+const UserIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: props?.className || "h-10 w-10", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 1.5 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" }));
+const WhistleIcon = (props) => React.createElement("svg", { ...props, className: props?.className || "h-6 w-6", viewBox: "0 0 24 24", fill: "none", xmlns: "http://www.w3.org/2000/svg" }, React.createElement("path", { d: "M7 10C8.65685 10 10 8.65685 10 7C10 5.34315 8.65685 4 7 4C5.34315 4 4 5.34315 4 7C4 8.65685 5.34315 10 7 10Z", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }), React.createElement("path", { d: "M10 7H14C15.1046 7 16 7.89543 16 9V13C16 14.1046 15.1046 15 14 15H8", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }), React.createElement("path", { d: "M16 11H20", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }), React.createElement("path", { d: "M8 15V19L10 17", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }));
+const LogoutIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: props?.className || "h-6 w-6", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 2 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" }));
+const ChevronLeftIcon = (props) => React.createElement("svg", { ...props, xmlns: "http://www.w3.org/2000/svg", className: props?.className || "h-6 w-6", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 3 }, React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15 19l-7-7 7-7" }));
 
 // Initial State and Reducer
 const initialState = {
@@ -319,7 +349,7 @@ const ModeSelectionScreen = ({ loggedInUser, dispatch, onLogout }) => {
 const LobbyScreen = ({ state, dispatch }) => {
     const [newPlayerName, setNewPlayerName] = useState('');
     const [copied, setCopied] = useState(false);
-    const { players, gameCode } = state;
+    const { players, gameCode, gameMode } = state;
 
     const handleAddPlayer = (e) => {
         e.preventDefault();
@@ -342,7 +372,7 @@ const LobbyScreen = ({ state, dispatch }) => {
     return React.createElement(Page, null,
         React.createElement(ScreenHeader, { title: "Sala de Espera", onBack: () => dispatch({ type: 'GO_HOME' }) }),
         React.createElement(Card, { className: "mt-20" },
-            React.createElement("div", { className: "flex justify-between items-center bg-green-900 px-4 py-2 rounded-lg mb-6 border border-green-400" },
+            gameMode === 'online' && React.createElement("div", { className: "flex justify-between items-center bg-green-900 px-4 py-2 rounded-lg mb-6 border border-green-400" },
                 React.createElement("div", { className: "text-left" },
                     React.createElement("span", { className: "text-gray-300 text-sm" }, "CÓDIGO DE PARTIDA"),
                     React.createElement("p", { className: "text-2xl font-bold tracking-widest text-yellow-400" }, gameCode)
@@ -369,14 +399,12 @@ const LobbyScreen = ({ state, dispatch }) => {
 };
 
 const RoleRevealScreen = ({ state, dispatch }) => {
-    const [isRevealed, setIsRevealed] = useState(false);
     const [isFlipped, setIsFlipped] = useState(false);
     const { players, currentPlayerTurnIndex, secretFootballer } = state;
     const currentPlayer = players[currentPlayerTurnIndex];
     const isLastPlayer = currentPlayerTurnIndex === players.length - 1;
 
     useEffect(() => {
-        setIsRevealed(false);
         setIsFlipped(false);
     }, [currentPlayerTurnIndex]);
 
@@ -387,17 +415,6 @@ const RoleRevealScreen = ({ state, dispatch }) => {
             dispatch({ type: 'ADVANCE_ROLE_REVEAL' });
         }
     };
-    
-    if (!isRevealed) {
-        return React.createElement(Page, null,
-            React.createElement(QuitButton, { onQuit: () => dispatch({ type: 'GO_HOME' }) }),
-            React.createElement(Card, null,
-                React.createElement("p", { className: "text-xl mb-4" }, "Pásale el móvil a"),
-                React.createElement("h1", { className: "text-4xl font-bold text-yellow-400 mb-8" }, currentPlayer.name),
-                React.createElement(Button, { onClick: () => setIsRevealed(true) }, "Listo, muéstrame mi rol")
-            )
-        );
-    }
 
     return React.createElement(Page, null,
         React.createElement(QuitButton, { onQuit: () => dispatch({ type: 'GO_HOME' }) }),
@@ -405,9 +422,11 @@ const RoleRevealScreen = ({ state, dispatch }) => {
             React.createElement("div", { className: `card-flipper w-full h-[500px] ${isFlipped ? 'flipped' : ''}` },
                 React.createElement("div", { className: "card-front absolute w-full h-full" },
                     React.createElement(Card, { className: "w-full h-full flex flex-col items-center justify-center" },
-                        React.createElement("h1", { className: "text-3xl font-bold mb-4" }, "Tu Identidad Secreta"),
-                        React.createElement(SoccerBallIcon, null),
-                        React.createElement("p", { className: "text-lg my-8" }, "Toca la carta para revelar tu rol"),
+                        React.createElement("p", { className: "text-xl mb-2" }, "Turno de"),
+                        React.createElement("h1", { className: "text-4xl font-bold text-yellow-400 mb-6" }, currentPlayer.name),
+                        React.createElement("h2", { className: "text-3xl font-bold mb-4" }, "Tu Identidad Secreta"),
+                        React.createElement(SoccerBallIcon, { className: "w-12 h-12" }),
+                        React.createElement("p", { className: "text-lg my-6" }, "Toca la carta para revelar tu rol"),
                         React.createElement("p", { className: "text-sm text-gray-400" }, "(Vuelve a tocarla para ocultarlo)")
                     )
                 ),
@@ -502,6 +521,7 @@ const DebateScreen = ({ state, dispatch }) => {
     );
 };
 
+
 const VotingScreen = ({ state, dispatch }) => {
     const livingPlayers = useMemo(() => state.players.filter(p => !p.isEliminated), [state.players]);
     const [votes, setVotes] = useState([]);
@@ -509,23 +529,23 @@ const VotingScreen = ({ state, dispatch }) => {
     const [selectedPlayerId, setSelectedPlayerId] = useState(null);
     const [votingPhase, setVotingPhase] = useState('CONFIRM_VOTER');
     const currentVoter = livingPlayers[voterIndex];
-
-    const handleVote = () => {
-        if (!selectedPlayerId) return;
-        const newVotes = [...votes, { voterId: currentVoter.id, votedPlayerId: selectedPlayerId }];
-        setVotes(newVotes);
-
-        if (voterIndex < livingPlayers.length - 1) {
-            setVotingPhase('VOTE_SUBMITTED');
-        } else {
-            dispatch({ type: 'SUBMIT_VOTE', payload: { votes: newVotes } });
-        }
-    };
     
     const handleNextVoter = () => {
         setVoterIndex(voterIndex + 1);
         setSelectedPlayerId(null);
         setVotingPhase('CONFIRM_VOTER');
+    };
+
+    const handleVote = () => {
+        if (!selectedPlayerId) return;
+        const finalVotes = [...votes, { voterId: currentVoter.id, votedPlayerId: selectedPlayerId }];
+        setVotes(finalVotes);
+
+        if (voterIndex < livingPlayers.length - 1) {
+            handleNextVoter();
+        } else {
+            dispatch({ type: 'SUBMIT_VOTE', payload: { votes: finalVotes } });
+        }
     };
 
     if (state.gameMode === 'offline' && votingPhase === 'CONFIRM_VOTER') {
@@ -536,18 +556,6 @@ const VotingScreen = ({ state, dispatch }) => {
                 React.createElement("p", { className: "text-yellow-400 text-4xl font-bold mb-6" }, currentVoter.name),
                 React.createElement("p", { className: "text-lg mb-6" }, "Pásale el móvil y que vote en secreto."),
                 React.createElement(Button, { onClick: () => setVotingPhase('VOTING_IN_PROGRESS') }, "Estoy listo para votar")
-            )
-        );
-    }
-    
-    if (state.gameMode === 'offline' && votingPhase === 'VOTE_SUBMITTED') {
-        return React.createElement(Page, null,
-            React.createElement(QuitButton, { onQuit: () => dispatch({ type: 'GO_HOME' }) }),
-            React.createElement(Card, null,
-                React.createElement("h1", { className: "text-2xl font-bold mb-4" }, "Voto Registrado"),
-                React.createElement(CheckIcon, { className: "w-16 h-16 text-yellow-400 mx-auto my-4" }),
-                React.createElement("p", { className: "text-lg mb-6" }, "Pasa el móvil al siguiente jugador."),
-                React.createElement(Button, { onClick: handleNextVoter }, "Siguiente Votante")
             )
         );
     }
