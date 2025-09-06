@@ -1,6 +1,15 @@
 import React, { useState, useReducer, useCallback, useMemo, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 
+// Data for footballer images (base64 encoded)
+const footballerImages = {
+  1: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBUVFRgVFRUYGBgYGBgYGBgYGBgYGBgYGBgZGRgYGBgcIS4lHB4rIRgYJjgmKy8xNTU1GiQ7QDs0Py40NTEBDAwMEA8QHxISHzQrJCs0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDT/wAARCAAwAEADASIAAhEBAxEB/8QAGwAAAgMBAQEAAAAAAAAAAAAAAAUDBAYCBwH/xAAyEAACAQIEAwYGAwEAAAAAAAABAgADEQQFEiExQVFhEyJxgZGhB7HB0fAyQlLhI/EGFv/EABcBAQEBAQAAAAAAAAAAAAAAAAABAgP/xAAgEQEBAAIBBAMBAAAAAAAAAAAAAQIRAxIhMVETQWEy/9/aAAwDAQACEQMRAD8A56J6kQAhCEACEIQAIQhAAm1YjU7z3kR12iE5S9/pAhCEACEIQAIRLQN4yUqT2uB/mB6CEIRAYhCEACEIQALzF+NfcRlMWYJ1/eYGp8QhCAxCEIAEIQgAQhCABCAiXQkDncfWAxCEIAEIQgAQhCAAxG+kIxAEIQgD//Z', // Messi
+  2: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBUVFRgVFRUYGBgYGBgYGBgYGBgYGBgYGBgZGRgYGBgcIS4lHB4rIRgYJjgmKy8xNTU1GI8eKzQtPy40NTUBDAwMEA8QHxISHy0rJCs0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDT/wAARCAAwAEADASIAAhEBAxEB/8QAGwAAAgMBAQEAAAAAAAAAAAAAAAUDBAYCBwH/xAAxEAAgIBAwIDBgYDAAAAAAAAAQIAAwQRIQUSEzFBUWEGInGBkaGx0RQyQsHwI1LhI//EABYBAQEBAAAAAAAAAAAAAAAAAAABAv/EACARAQEAAgEEAwEAAAAAAAAAAAABAhEDEhMhMVEEQWH/2gAMAwEAAhEDEQA/APnEQhCABCEIAEIQgAQhAJHUTDUtP6GEL78yN/8AMkdoj8TqV23n8wLkIQgAQhCABM9I217f2ZhmjSuN6/f+ICSEIQGIQhAAhCEACr0/xN9JmJ1qfxN9JgarCEIDUIQgAQhCABCEIAEQ9SBEQDUIQgP/Z', // Ronaldo
+  4: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBYVFRgWFRUYGBgYGBgYGBgYGBgYGBgYGBgZGRgYGBgcIS4lHB4rIRgYJjgmKy8xNTU1GiQ7QDs0Py40NTEBDAwMEA8QHxISHzErJCs0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDT/wAARCAAwAEADASIAAhEBAxEB/8QAGwAAAgIDAQAAAAAAAAAAAAAAAAQDBQECBgf/xAAzEAACAQIEAwYDBQEAAAAAAAABAgADEQQFEiExQVFhEyJxgZGh0fAHscEyQlLhI/EGFv/EABcBAQEBAQAAAAAAAAAAAAAAAAABAgP/xAAfEQEAAgEEAwEAAAAAAAAAAAAAAQIDERIhMVEEQWH/2gAMAwEAAhEDEQA/AM4hCEACEIQAIQhAAhCEAkxG0lD23kMxS53gZIQhAAhCEACaMP/AB9cxDHD/wAfXMCSEIQGIQhAAhCEACcx8bSZyYgNwhCAxCEIAEIQgAQhCABGImAQhCAP/Z', // Mbappé
+  101: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBYVFRgWFRUYGBgYGBgYGBgYGBgYGBgYGBgZGRgYGBgcIS4lHB4rIRgYJjgmKy8xNTU1GiQ7QDs0Py40NTEBDAwMEA8QHxISHzQrJCs0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDT/wAARCAAwAEADASIAAhEBAxEB/8QAGwAAAgIDAQAAAAAAAAAAAAAAAAQDBQECBgf/xAAwEAACAQIEAwYGAwAAAAAAAAABAgADEQQFEiExQVFhEyJxgZGhsfAHwdEyQlLhIv/EABYBAQEBAAAAAAAAAAAAAAAAAAABAv/EAB4RAQEAAgICAwEAAAAAAAAAAAABAhEDIRIxQVFh/9oADAMBAAIRAxEAPwDx6EIRAYhCEACEIQAIQhAIkYQhAYhCEACEIQAJoZzDGYGrCEIDUIQgAQhCABCEIAERGIgGwhCAxCEIAEIQgAQhCAAiIjAEREID/2gA==', // Pelé
+  102: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBYVFRgWFRUYGBgYGBgYGBgYGBgYGBgYGBgZGRgYGBgcIS4lHB4rIRgYJjgmKy8xNTU1GI8eKzQtPy40NTUBDAwMEA8QHxISHzErJCs0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDT/wAARCAAwAEADASIAAhEBAxEB/8QAGwAAAgIDAQAAAAAAAAAAAAAAAAUDBAECBgf/xAAzEAACAQIEAwYGAwEAAAAAAAABAgADEQQFEiExQVFhEyJxgZGhsfAHwdEyQlLhI/EGFv/EABYBAQEBAAAAAAAAAAAAAAAAAAABAv/EAB4RAQEAAgICAwEAAAAAAAAAAAABAhEDIRIxQVFh/9oADAMBAAIRAxEAPwDx+EIRAYhCEACEIQAIQhAIkYQhAYhCEACEIQAJoZzDGYGrCEIDUIQgAQhCABCEIAERGIgGwhCAxCEIAEIQgAQhCAAiIjAEREID/2gA==' // Maradona
+};
+
 // Data for footballers, now categorized
 const footballerData = {
   principiante: [
@@ -359,7 +368,11 @@ const gameReducer = (state, action) => {
           usedIdsForCategory = [];
       }
 
-      const secretFootballer = availableFootballers[Math.floor(Math.random() * availableFootballers.length)];
+      let secretFootballer = availableFootballers[Math.floor(Math.random() * availableFootballers.length)];
+      if (footballerImages[secretFootballer.id]) {
+        secretFootballer = { ...secretFootballer, imageUrl: footballerImages[secretFootballer.id] };
+      }
+
       const updatedUsedIds = {
           ...state.usedFootballerIds,
           [state.footballerCategory]: [...usedIdsForCategory, secretFootballer.id]
@@ -720,6 +733,7 @@ const RoleRevealScreen = ({ state, dispatch }) => {
                             )
                         ),
                         currentPlayer.role === 'squad' && secretFootballer && React.createElement("div", { className: "mb-6 text-center" },
+                            secretFootballer.imageUrl && React.createElement("img", { src: secretFootballer.imageUrl, alt: secretFootballer.name, className: "w-32 h-32 object-cover rounded-full mx-auto mb-4 border-4 border-yellow-400" }),
                             React.createElement("p", { className: "text-md mb-2" }, "El futbolista secreto es:"),
                             React.createElement("h3", { className: "text-xl font-bold text-yellow-400 mb-2" }, secretFootballer.name),
                         ),
@@ -936,6 +950,7 @@ const EndGameScreen = ({ state, dispatch }) => {
                 React.createElement("h2", { className: "text-3xl font-bold text-red-500 mb-4" }, "¡LOS IMPOSTORES GANAN!"),
                 impostors.length > 0 && React.createElement("p", { className: "text-xl mb-4" }, `¡${impostors.map(i => i.name).join(' y ')} han engañado a todos!` )
             ),
+            secretFootballer?.imageUrl && React.createElement("img", { src: secretFootballer.imageUrl, alt: secretFootballer.name, className: "w-24 h-24 object-cover rounded-full mx-auto my-4 border-4 border-yellow-400" }),
             React.createElement("p", { className: "text-md mt-4 text-gray-300" }, "El futbolista secreto era ", React.createElement("span", { className: "font-bold text-yellow-400" }, secretFootballer?.name), "."),
             React.createElement("div", { className: "my-8" },
                 React.createElement("h3", { className: "text-2xl font-semibold mb-4 border-b-2 border-green-400 pb-2" }, "Tabla de Goleadores"),
@@ -961,15 +976,6 @@ const App = () => {
         if (storedName) {
             setLoggedInUser(storedName);
         }
-
-        // Preload images - consider doing this more selectively if list gets huge
-        // const imageUrls = footballerData.facil.map(f => f.imageUrl).slice(0, 10);
-        // imageUrls.forEach(url => {
-        //     if(url) {
-        //         const img = new Image();
-        //         img.src = url;
-        //     }
-        // });
     }, []);
 
     const handleLogin = (name) => {
