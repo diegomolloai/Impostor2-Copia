@@ -681,7 +681,7 @@ const RoleRevealScreen = ({ state, dispatch }) => {
         setIsButtonDisabled(true);
         const timer = setTimeout(() => {
             setIsButtonDisabled(false);
-        }, 2000);
+        }, 3500);
         return () => clearTimeout(timer);
     }, [currentPlayerTurnIndex]);
 
